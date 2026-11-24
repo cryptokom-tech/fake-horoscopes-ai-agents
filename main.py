@@ -21,7 +21,17 @@ HOROSCOPE = (
 
 
 def valid(text):
-    return bool(text) and len(text) <= 200 and "\n" not in text and "\r" not in text
+    if not text or len(text) > 200:
+        return False
+    if text != text.strip():
+        return False
+    if "\n" in text or "\r" in text:
+        return False
+    if any(ord(ch) < 32 for ch in text):
+        return False
+    if "  " in text:
+        return False
+    return True
 
 
 def main(argv):
@@ -30,7 +40,8 @@ def main(argv):
         print(text)
         print("chars: %d" % len(text))
         print("lines: %d" % (text.count("\n") + 1))
-        return 0
+        print("valid: %s" % valid(text))
+        return 0 if valid(text) else 1
     if not valid(text):
         print("invalid horoscope line", file=sys.stderr)
         return 1
